@@ -10,7 +10,7 @@ const {
 
 router.get("/", getAllProduct);
 router.post("/create", upload.single("image_url"), createNewProduct);
-router.put("/update/:id", upload.single("image_url"), updateProduct);
+router.put("/update/:id", updateProduct);
 router.delete("/delete/:id", deleteProduct);
 
 module.exports = router;
