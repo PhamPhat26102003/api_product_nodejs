@@ -3,6 +3,11 @@ const app = express();
 const router = require("./src/route/api");
 const sequelize = require("./src/db/connect");
 const path = require("path");
+const User = require("./src/model/user");
+const Product = require("./src/model/product");
+const Cart = require("./src/model/cart");
+const CartItem = require("./src/model/cartItem");
+
 require("dotenv").config();
 
 app.use(express.json());
@@ -23,3 +28,5 @@ sequelize
     console.log("Error with connect to database: ", err);
     process.exit(0);
   });
+
+module.exports = { User, Product, Cart, CartItem };
