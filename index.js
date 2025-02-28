@@ -7,6 +7,8 @@ const User = require("./src/model/user");
 const Product = require("./src/model/product");
 const Cart = require("./src/model/cart");
 const CartItem = require("./src/model/cartItem");
+const Order = require("./src/model/order");
+const OrderItem = require("./src/model/orderItem");
 
 require("dotenv").config();
 
@@ -29,4 +31,4 @@ sequelize
     process.exit(0);
   });
 
-module.exports = { User, Product, Cart, CartItem };
+module.exports = { User, Product, Cart, CartItem, Order, OrderItem };

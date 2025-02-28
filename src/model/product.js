@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db/connect");
+const OrderItem = require("./orderItem");
 
 const Product = sequelize.define(
   "Product",
@@ -27,5 +28,10 @@ const Product = sequelize.define(
   },
   { timestamps: true },
 );
+
+Product.hasMany(OrderItem, {
+  foreignKey: "product_id",
+  onDelete: "CASCADE",
+});
 
 module.exports = Product;

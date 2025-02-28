@@ -5,16 +5,25 @@ const {
   createNewProduct,
   updateProduct,
   deleteProduct,
-  addToCart,
   upload,
 } = require("../controller/productController");
+
+const {
+  getCart,
+  addToCart,
+  checkout,
+} = require("../controller/cartController");
 
 router.get("/", getAllProduct);
 router.post("/create", upload.single("image_url"), createNewProduct);
 router.put("/update/:id", upload.single("image_url"), updateProduct);
 router.delete("/delete/:id", deleteProduct);
 
+//Hien thi gio hang cua user
+router.get("/cart/:userId", getCart);
 //Them san pham vao gio hang
-router.post("/add-to-cart", addToCart);
+router.post("/cart/add-to-cart", addToCart);
+//Mua san pham
+router.post("/cart/checkout", checkout);
 
 module.exports = router;

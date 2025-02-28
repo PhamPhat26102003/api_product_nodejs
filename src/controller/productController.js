@@ -1,9 +1,6 @@
 const multer = require("multer");
 const path = require("path");
 const Product = require("../model/product");
-const User = require("../model/user");
-const Cart = require("../model/cart");
-const CartItem = require("../model/cartItem");
 
 //Lay tat ca ban ghi
 const getAllProduct = async (req, res) => {
@@ -123,67 +120,10 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-//Them san pham vao gio hang
-const addToCart = async (req, res) => {
-  try {
-    const { userId, productId, quantity } = req.body;
-
-    if (!userId || !productId || !quantity || quantity <= 0) {
-      return res.status(400).json({ message: "Invalid request data" });
-    }
-
-    // Kiểm tra user có tồn tại không
-    const user = await User.findByPk(userId);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Kiểm tra sản phẩm có tồn tại không
-    const product = await Product.findByPk(productId);
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
-    }
-
-    // Kiểm tra giỏ hàng của user
-    let cart = await Cart.findOne({ where: { user_id: userId } });
-    if (!cart) {
-      cart = await Cart.create({ user_id: userId });
-    }
-
-    // Kiểm tra sản phẩm đã có trong giỏ hàng chưa
-    let cartItem = await CartItem.findOne({
-      where: { cart_id: cart.id, product_id: productId },
-    });
-
-    if (cartItem) {
-      // Cập nhật số lượng nếu sản phẩm đã có trong giỏ hàng
-      cartItem.quantity += quantity;
-      await cartItem.save();
-    } else {
-      // Thêm sản phẩm mới vào giỏ hàng
-      cartItem = await CartItem.create({
-        cart_id: cart.id,
-        product_id: productId,
-        quantity,
-      });
-    }
-
-    return res
-      .status(201)
-      .json({ message: "Added to cart successfully", cartItem });
-  } catch (err) {
-    console.error("Error adding to cart:", err);
-    res
-      .status(500)
-      .json({ message: "Error adding to cart", error: err.message });
-  }
-};
-
 module.exports = {
   getAllProduct,
   createNewProduct,
   updateProduct,
   deleteProduct,
-  addToCart,
   upload,
 };
