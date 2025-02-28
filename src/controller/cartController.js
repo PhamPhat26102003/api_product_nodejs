@@ -103,6 +103,52 @@ const addToCart = async (req, res) => {
   }
 };
 
+//Cap nhat gio hang
+const updateCart = async (req, res) => {
+  try {
+    const { userId, productId, quantity } = req.body;
+
+    //Kiem tra gio hang cua user
+    const cart = await Cart.findOne({ where: { user_id: userId } });
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found!!" });
+    }
+
+    //Kiem tra san pham co ton tai ko
+    const product = await Product.findByPk(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found!!" });
+    }
+
+    //Kiem tra san pham co trong gio hang chua
+    const cartItem = await CartItem.findOne({
+      where: { cart_id: cart.id, product_id: productId },
+    });
+    if (!cartItem) {
+      return res.status(404).json({ message: "Product not found in cart!!" });
+    }
+
+    //Neu so luong <= 0 xoa khoi gio hang
+    if (quantity <= 0) {
+      await cartItem.destroy();
+      return res.status(200).json({ message: "Product removed from cart!!" });
+    }
+
+    //Cap nhat so luong trong gio hang
+    cartItem.quantity = quantity;
+    await cartItem.save();
+
+    return res
+      .status(200)
+      .json({ message: "Update cart successfully", cartItem });
+  } catch (err) {
+    console.error("Error updating cart:", err);
+    res
+      .status(500)
+      .json({ message: "Error updating cart", error: err.message });
+  }
+};
+
 //Mua san pham
 const checkout = async (req, res) => {
   try {
@@ -188,4 +234,4 @@ const checkout = async (req, res) => {
   }
 };
 
-module.exports = { getCart, addToCart, checkout };
+module.exports = { getCart, addToCart, updateCart, checkout };

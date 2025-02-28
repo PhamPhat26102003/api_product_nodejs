@@ -11,6 +11,7 @@ const {
 const {
   getCart,
   addToCart,
+  updateCart,
   checkout,
 } = require("../controller/cartController");
 
@@ -23,6 +24,8 @@ router.delete("/delete/:id", deleteProduct);
 router.get("/cart/:userId", getCart);
 //Them san pham vao gio hang
 router.post("/cart/add-to-cart", addToCart);
+//Cap nhat san pham trong gio hang
+router.put("/cart/update", updateCart);
 //Mua san pham
 router.post("/cart/checkout", checkout);
 
