@@ -14,6 +14,18 @@ const getAllProduct = async (req, res) => {
   }
 };
 
+//Lay 1 ban ghi
+const getProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findByPk(id);
+    if (!product) {
+      return res.status(404).json({ message: "Product id not found" });
+    }
+    return res.status(200).json(product);
+  } catch (err) {}
+};
+
 //Cau hinh luu file anh
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -122,6 +134,7 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   getAllProduct,
+  getProduct,
   createNewProduct,
   updateProduct,
   deleteProduct,

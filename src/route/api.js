@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {
   getAllProduct,
+  getProduct,
   createNewProduct,
   updateProduct,
   deleteProduct,
@@ -16,6 +17,7 @@ const {
 } = require("../controller/cartController");
 
 router.get("/", getAllProduct);
+router.get("/:id", getProduct);
 router.post("/create", upload.single("image_url"), createNewProduct);
 router.put("/update/:id", upload.single("image_url"), updateProduct);
 router.delete("/delete/:id", deleteProduct);
